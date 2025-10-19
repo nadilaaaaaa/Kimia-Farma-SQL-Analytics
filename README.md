@@ -49,10 +49,8 @@ Due to confidentiality, the datasets utilized in this project cannot be disclose
 
 ## 📝 SQL Scripts
 ###  1️⃣ Data Cleaning  
+#### Cleaning Transaction Table
 ```sql
--- =========================================
--- CLEANING TRANSACTION TABLE
--- =========================================
 CREATE OR REPLACE TABLE `kimia_farma.kf_final_transaction` AS SELECT
      TRIM (transaction_id) AS transaction_id,       
      date,
@@ -75,10 +73,10 @@ AND branch_id IS NOT NULL
 AND customer_name IS NOT NULL
 AND product_id IS NOT NULL
 AND price IS NOT NULL;
+```
 
--- =========================================
--- CLEANING INVENTORY TABLE
--- =========================================
+#### Cleaning Inventory Table
+```sql
 CREATE OR REPLACE TABLE `kimia_farma.kf_inventory` AS SELECT
 Inventory_ID,
 branch_id,
@@ -91,10 +89,10 @@ WHERE Inventory_ID IS NOT NULL
 AND branch_id IS NOT NULL
 AND product_id IS NOT NULL
 AND product_name IS NOT NULL;
+```
 
--- =========================================
--- CLEANING BRANCH TABLE
--- =========================================
+#### Cleaning Branch Table
+```sql
 CREATE OR REPLACE TABLE `kimia_farma.kf_kantor_cabang` AS SELECT
 branch_id,
 TRIM(branch_category) AS branch_category,
@@ -105,10 +103,10 @@ CASE WHEN rating < 0 OR rating > 5 THEN NULL
 ELSE rating END AS rating
 FROM `kimia_farma.kf_kantor_cabang`
 WHERE branch_id IS NOT NULL;
+```
 
--- =========================================
--- CLEANING PRODUCT TABLE
--- =========================================
+#### Cleaning Product Table
+```sql
 CREATE OR REPLACE TABLE `kimia_farma.kf_product` AS SELECT
 product_id,
 TRIM(product_name) AS product_name,
@@ -118,6 +116,7 @@ ELSE price
 END AS price
 FROM `kimia_farma.kf_product`;
 ```
+---
 ### 2️⃣ Data Transformation
 ```sql
 CREATE OR REPLACE TABLE kimia_farma.tabel_analisa AS
@@ -158,10 +157,9 @@ ON t.branch_id = b.branch_id
 JOIN `kimia_farma.kf_product` p
 ON t.product_id = p.product_id;
 ```
+---
 From these sources, a central analytical table called tabel_analisa was created.
 It integrates transactions, branches, and products to support BI and analytics.
-
----
 
 ### tabel_analisa
 
@@ -184,7 +182,7 @@ It integrates transactions, branches, and products to support BI and analytics.
 | rating_transaksi    | FLOAT   | Customer rating for transaction (1–5) |
 
 
-
+---
 ### 3️⃣ Data Exploration
 #### 📊 Year-over-Year Revenue & Profit (2020–2023)
 ```sql
@@ -267,6 +265,7 @@ FROM `kimia_farma.tabel_analisa`
 GROUP BY product_name
 ORDER BY banyak_transaksi DESC;
 ```
+---
 ## 📈 Dashboard Preview
 🔗***Interactive Dashboard: https://lookerstudio.google.com/reporting/f5603bef-598f-4bfd-9b80-24ceb2d5513b***
 
